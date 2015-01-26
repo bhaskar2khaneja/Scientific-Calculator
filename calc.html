@@ -1,0 +1,144 @@
+<html>
+	<head>
+		<link rel = "stylesheet" href = "calc.css"/>
+		<title> Scientific Calculator </title>
+	</head>
+
+	<body>
+	<div id = "calculator">
+		<input type = "text" id="display" size = "27" />
+		<p id = "l1"></p>
+		<script>
+			var array = ["7","8","9","+","-","4","5","6","*","/","1","2","3","sin","cos","=","0","!","tan","exp","clr",".","(",")","del"];
+			for(var i=1;i<26;i++) //i=16 is "=" & i=21 is "clr", for which there are different onClick functions
+			{
+				if(i!=14 && i!=15 && i!=16 && i!=19 && i!=20 && i!=21 && i!=25)
+				{
+					var but = "<input type = 'button' class = 'buttons' onClick = 'func(this)' value='"+ array[i-1] +"' />";
+					document.getElementById("l1").innerHTML = document.getElementById("l1").innerHTML + "&nbsp;" + but;
+				}
+
+				else if(i==14 || i==15 || i==19 || i==20)
+				{
+					var but = "<input type = 'button' class = 'buttons' onClick = 'splfunc(this)' value='"+ array[i-1] +"' />";
+					document.getElementById("l1").innerHTML = document.getElementById("l1").innerHTML + "&nbsp;" + but;
+				}
+				
+				else if (i==16)
+				{
+					var but = "<input type = 'button' class = 'buttons' onClick = 'ans()' value='" + array[i-1] + "' />";
+					document.getElementById("l1").innerHTML = document.getElementById("l1").innerHTML + "&nbsp;" + but;
+				}
+
+				else if(i==21)
+				{
+					var but = "<input type = 'button' class = 'buttons' onClick = 'rem()' value='"+ "clr" +"' />";
+					document.getElementById("l1").innerHTML = document.getElementById("l1").innerHTML + "&nbsp;" + but;
+				}
+
+				else if(i==25)
+				{
+					var but = "<input type = 'button' class = 'buttons' onClick = 'del()' value='"+ "del" +"' />";
+					document.getElementById("l1").innerHTML = document.getElementById("l1").innerHTML + "&nbsp;" + but;
+				}
+
+				if (i%5==0) //to move onto the next line after every 5 buttons
+				{
+					document.getElementById("l1").innerHTML = document.getElementById("l1").innerHTML + "<br>";
+				}
+			}
+
+			function func(button) //to display numbers and operators in the text field
+			{
+				alert(this);
+				document.getElementById("display").value = document.getElementById("display").value + button.value;
+			}
+
+			function splfunc(button)
+			{
+				document.getElementById("display").value = document.getElementById("display").value + button.value + "(";
+			}
+
+			function ans()
+			{
+				for(var i = document.getElementById("display").value.length-1;i>=0;i--)
+				{
+					var t = document.getElementById("display").value.slice(i,i+3) + "(";
+					var p = document.getElementById("display").value.slice(i,i+1);
+
+					if (t == "sin(")
+					{
+						var temp = (document.getElementById("display").value.slice(i+4)).split(")");
+						var k = Math.sin(parseFloat(temp[0]));
+						document.getElementById("display").value = document.getElementById("display").value.replace("sin(" + temp[0] + ")",k);
+					}
+
+					else if (t == "cos(")
+					{
+						var temp = (document.getElementById("display").value.slice(i+4)).split(")");
+						var k = Math.cos(parseFloat(temp[0]));
+						document.getElementById("display").value = document.getElementById("display").value.replace("cos(" + temp[0] + ")",k);
+					}
+
+					else if (t == "tan(")
+					{
+						var temp = (document.getElementById("display").value.slice(i+4)).split(")");
+						var k = Math.tan(parseFloat(temp[0]));
+						document.getElementById("display").value = document.getElementById("display").value.replace("tan(" + temp[0] + ")",k);
+					}
+
+					else if (t == "exp(")
+					{
+						var temp = (document.getElementById("display").value.slice(i+4)).split(")");
+						var k = Math.exp(parseFloat(temp[0]));
+						document.getElementById("display").value = document.getElementById("display").value.replace("exp(" + temp[0] + ")",k);
+					}
+
+					else if (p == "!")
+					{
+						for(var count = i-1;count>=0;count--)
+						{
+							var part = document.getElementById("display").value.slice(count,i);
+							if (isNaN(parseFloat(part)) == true)
+							{
+								break;
+							}
+						}
+
+						part = document.getElementById("display").value.slice(count+1,i);
+						var res = fact(parseFloat(part));
+						document.getElementById("display").value = document.getElementById("display").value.replace(part+"!",res);
+					}
+
+				}
+
+				var result = eval(document.getElementById("display").value);
+				document.getElementById("display").value = result;
+			}
+
+			function fact(num)
+			{
+				if (num==0)
+				{
+					return 1;
+				}
+				else
+				{
+					return num*fact(num-1);
+				}
+			}
+
+			function rem()
+			{
+				document.getElementById("display").value = "";
+			}
+
+			function del()
+			{
+				document.getElementById("display").value = document.getElementById("display").value.slice(0,-1);
+			}
+
+		</script>
+	</div>
+	</body>
+</html>
